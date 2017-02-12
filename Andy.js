@@ -1,9 +1,9 @@
 (function(global) {//main wrapper
 
   (function(Andy) {//globaliser
-    if (module!=="undefined") {
+    if (typeof module!=="undefined") {
       module=Andy;
-    }else if(require!=="undefined"){
+    }else if(typeof require!=="undefined"){
       require("Andy",function() {
         return Andy;
       });
