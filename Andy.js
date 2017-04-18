@@ -3,8 +3,8 @@
   (function(Andy) {//globaliser
     if (typeof module!=="undefined") {
       module=Andy;
-    }else if(typeof require!=="undefined"){
-      require("Andy",function() {
+    }else if(typeof define!=="undefined"){
+      define("Andy",function() {
         return Andy;
       });
     }
