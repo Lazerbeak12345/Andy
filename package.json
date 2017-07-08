@@ -1,0 +1,18 @@
+{
+	"name":"Learner",
+	"version":"0.0.0",
+	"license":"MIT",
+	"repository":{
+		"type":"git",
+		"url":"https://github.com/Lazerbeak12345/Learner.git"
+	},
+	"devDependencies": {
+		"grunt": "1.0.1",
+		"grunt-cli": "1.2.0",
+		"grunt-contrib-jshint": "1.0.0",
+		"grunt-bootlint":"0.10.1"
+	},
+	"scripts": {
+		"test": "grunt --verbose"
+	}
+}

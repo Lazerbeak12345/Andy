@@ -1,10 +1,10 @@
 (function(global) {//main wrapper
 
   (function(Andy) {//globaliser
-    if (module) {
+    if (typeof module!=="undefined") {
       module=Andy;
-    }else if(require){
-      require("Andy",function() {
+    }else if(typeof define!=="undefined"){
+      define("Andy",function() {
         return Andy;
       });
     }
