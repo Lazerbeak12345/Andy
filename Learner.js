@@ -80,8 +80,8 @@
 				//"deep":function() {},
 				//"Q":function() {},
 			},
-		}
+		};
 		return Learner;
-	})())
+	})());
 
-})(this)
+})(this);
