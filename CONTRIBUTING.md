@@ -1,0 +1,10 @@
+# Contributing
+## Versioning
+Normal versioning: `v[HUGE change].[backwards-compat].[bug-or-issue]`
+
+Pre-alfa, alfa, beta, etc:  `v[HUGE change*].[backwards-compat*].[bug-or-issue*].[pre-alfa,alfa,beta,etc].[backwards-compat].[bug-or-issue]`
+
+For example: `v1.4.7` or: `v3.2.6.beta.5.2`
+
+*these don't change while in pre-alfa,alfa,beta,etc.
+They merely stay as whatever version it was before it entered pre-alfa
