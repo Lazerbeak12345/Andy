@@ -1,5 +1,8 @@
 # Contributing
 ## Versioning
+
+>The version *must* be changed in the `package.json` file *every* time a change is made
+
 Normal versioning: `v[HUGE change].[backwards-compat].[bug-or-issue]`
 
 Pre-alfa, alfa, beta, etc:  `v[HUGE change*].[backwards-compat*].[bug-or-issue*].[pre-alfa,alfa,beta,etc].[large(noteworthy)-change].[bug-or-issue]`
