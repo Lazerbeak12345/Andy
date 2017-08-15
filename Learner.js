@@ -69,43 +69,48 @@
 				  Note that extensions of this library can add learning cores to this object.
 				*/
 				"default":function(e) {
-					console.group("Default core is being applied.");
+					e=applyDefaults(e,{
+						thinkInterval:100,//the amount of time between each thought in milliseconds, as it is passed directly to the second argument of setTimeout(). If thinkInterval===false, the bot can't think before it does anything.
+						thinkFilter:function(input) { return "thought:"+input;},//an oppertunity to change the thought to a proper input format, if needed.
+						reinforcementDecay:.875;//see "this.reinforcement" as defined in this function
+						reinforcementDecayLimit:.5;//see "this.reinforcement" as defined in this function
+						actionMap:{
+							think:function(str) {
+								if (!this.thinkInterval) return;
+								setTimeout(function() {
+									this.action(this.thinkFilter(str));
+								},this.thinkInterval);
+							},
+						},
+					});
 					
-						console.info("Configuring core settings.");
+					var self_esteem=0;//The greater the number, the more self-esteem the bot is estimated to have
+					Object.defineProperty(this, 'self_esteem', { get: function() { return self_esteem; }, });
+					
+					this.action=function(e0) {
+						/*called on user action, or other enviromential changes*/
+					};
+					hide(this.action);
+					
+					this.reinforcement=function(e1) {
+						/*user rewards or punishes (positive or negitive reinforcemnt)*/
 						
-							e=applyDefaults(e,{
-								thinkInterval:100,//the amount of time between each thought in milliseconds, as it is passed directly to the second argument of setTimeout(). If thinkInterval===false, the bot can't think before it does anything.
-								thinkFilter:function(input) { return "thought:"+input;},//an oppertunity to change the thought to a proper input format, if needed.
-								actionMap:{
-									think:function(str) {
-										if (!this.thinkInterval) return;
-										setTimeout(function() {
-											this.action(this.thinkFilter(str));
-										},this.thinkInterval);
-									},
-								},
-							});
-							
-						this.action=function() {
-							/*called on user action, or other enviromential changes*/
-						};
-						hide(this.action);
-						
-						this.reinforcement=function() {
-							/*user rewards or punishes (positive or negitive reinforcemnt)*/
-						};
-						hide(this.reinforcement);
-						
-					console.groupEnd();
+						e1=applyDefaults(e1,{
+							val:1,//the value to apply to each string and substring
+							reinforcementDecay:e.reinforcementDecay;//before working on an older string, "val" is multiplied by this number
+							reinforcementDecayLimit:e.reinforcementDecayLimit;//the limit for how close "val" can be to zero before aborting "recursive" history reinforcement
+						});
+					};
+					hide(this.reinforcement);
 				},
 				
 				"__brickWall__":function(e) {
 					e=applyDefaults(e,{
-						act:function(str) {
+						act:function(str) {//bot acts
 							console.log(str);
 						},
 					});
-					this.action=function(str) {
+					this.action=function(str) {//user acts
 						e.act(str);
 					};
 				},
