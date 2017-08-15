@@ -72,8 +72,8 @@
 					e=applyDefaults(e,{
 						thinkInterval:100,//the amount of time between each thought in milliseconds, as it is passed directly to the second argument of setTimeout(). If thinkInterval===false, the bot can't think before it does anything.
 						thinkFilter:function(input) { return "thought:"+input;},//an oppertunity to change the thought to a proper input format, if needed.
-						reinforcementDecay:.875;//see "this.reinforcement" as defined in this function
-						reinforcementDecayLimit:.5;//see "this.reinforcement" as defined in this function
+						reinforcementDecay:.875;//see "this.reinforcement" as defined in this core
+						reinforcementDecayLimit:.5;//see "this.reinforcement" as defined in this core
 						actionMap:{
 							think:function(str) {
 								if (!this.thinkInterval) return;
@@ -85,21 +85,50 @@
 					});
 					
 					var self_esteem=0;//The greater the number, the more self-esteem the bot is estimated to have
-					Object.defineProperty(this, 'self_esteem', { get: function() { return self_esteem; }, });
+					Object.defineProperty(this,'self_esteem',{get:function(){return self_esteem;}});// no changes to the varuble unless done internally via this core
+					var my_history=[];//a list of outputs that the bot has sent to a method in the action map
+					Object.defineProperty(this,'my_history',{get:function(){return my_history;}});
+					var __words__={};//all of the sub-strings that have a value asociated with them
+					Object.defineProperty(this,'__words__',{get:function(){return __words__;}});
 					
 					this.action=function(e0) {
 						/*called on user action, or other enviromential changes*/
 					};
 					hide(this.action);
 					
-					this.reinforcement=function(e1) {
+					this.reinforcement=function f(e1) {
 						/*user rewards or punishes (positive or negitive reinforcemnt)*/
 						
 						e1=applyDefaults(e1,{
-							val:1,//the value to apply to each string and substring
+							val:0,//the value to apply to each string and substring - <0 is a punishment >0 is a reward zero does nothing
 							reinforcementDecay:e.reinforcementDecay;//before working on an older string, "val" is multiplied by this number
 							reinforcementDecayLimit:e.reinforcementDecayLimit;//the limit for how close "val" can be to zero before aborting "recursive" history reinforcement
 						});
+						
+						var i,len,index,part;//prevents a varuble from being redefined at every iteration of a loop, these varubles will be defined via their first usage
+						
+						for (i=my_history.length; (i>=0&&e1.val<e1.reinforcementDecayLimit); i--) {//every item in the output history, as long as the reinforcementDecayLimit allows, then leave the loop if the criteria doesn't fit anymore
+							
+							for (len=(my_history[i].length); len>1; len--){//the length of the sub-string
+								for (index=0; index<(my_history[i].length-len); index++) {//the position of the sub-string
+								
+									part=my_history[i].substr(index,len);
+									
+									/*if the sub-string has not been incountered before, make a spot for it to go*/
+									if(typeof __words__[len]==="undefined"){
+										__words__[len]={};
+									}
+									if(typeof __words__[len][part]==="undefined"){
+										__words__[len][part]=el.val;
+										continue;//in this case it would be a waste of prossessing to set it to zero now then change it later, so just go on
+									}
+									
+									__words__[len][part]+=el.val;
+								}
+							}
+							
+							el.val*=e1.reinforcementDecay;
+						}
 					};
 					hide(this.reinforcement);
 				},
