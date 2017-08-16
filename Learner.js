@@ -31,6 +31,9 @@
 		}
 		return output;
 	}
+	function defOneWayVar(str,v) {
+		Object.defineProperty(this,str,{get:function(){return v;}});// no changes to the varuble unless done internally via this core
+	}
 
 	(function(Learner) {//globaliser
 		if (typeof module!=="undefined") {
@@ -84,12 +87,18 @@
 						},
 					});
 					
-					var selfEsteem=0;//The greater the number, the more self-esteem the bot is estimated to have
-					Object.defineProperty(this,'selfEsteem',{get:function(){return selfEsteem;}});// no changes to the varuble unless done internally via this core
-					var myHistory=[];//a list of outputs that the bot has sent to a method in the action map
-					Object.defineProperty(this,'myHistory',{get:function(){return myHistory;}});
-					var __words__={};//all of the sub-strings that have a value asociated with them
-					Object.defineProperty(this,'__words__',{get:function(){return __words__;}});
+					var selfEsteem=0,//The greater the number, the more self-esteem the bot is estimated to have
+					myHistory=[],//a list of outputs that the bot has sent to a method in the action map
+					envHistory=[],//a list of enviromential updates
+					allHistory=[],//a list of all enviromential updates and outputs that the bot has sent to a method in the action map
+					words={};//all of the sub-strings that have a value asociated with them
+					
+					//make all of these varubles acccesssable to the enviroment, but not changeable
+					def.call(this,'selfEsteem',selfEsteem);//as this number would be more usefull in the enviroment the underscores marking that it is internal is unneccicary
+					def.call(this,'__myHistory__',myHistory);
+					def.call(this,'__envHistory__',envHistory);
+					def.call(this,'__allHistory__',allHistory);
+					def.call(this,'__words__',words);
 					
 					this.action=function(e0) {
 						/*called on user action, or other enviromential changes*/
@@ -112,18 +121,18 @@
 							for (len=(myHistory[i].length); len>1; len--){//the length of the sub-string
 								for (index=0; index<(myHistory[i].length-len); index++) {//the position of the sub-string
 								
-									part=myHistory[i].substr(index,len);
+									part=myHistory[i].substr(index,len);//this is the actual sub-string
 									
 									/*if the sub-string has not been incountered before, make a spot for it to go*/
-									if(typeof __words__[len]==="undefined"){
-										__words__[len]={};
+									if(typeof words[len]==="undefined"){
+										words[len]={};
 									}
-									if(typeof __words__[len][part]==="undefined"){
-										__words__[len][part]=el.val;
-										continue;//in this case it would be a waste of prossessing to set it to zero now then change it later, so just go on
+									if(typeof words[len][part]==="undefined"){
+										words[len][part]=el.val;
+										continue;//in this case it would be a waste of prossessing to set it to zero now then change it later, so just go on to the next sub-string
 									}
 									
-									__words__[len][part]+=el.val;
+									words[len][part]+=el.val;//this is where the value is actually changed
 								}
 							}
 							
@@ -133,7 +142,7 @@
 					hide(this.reinforcement);
 				},
 				
-				"__brickWall__":function(e) {
+				"__brickWall__":function(e) {//this can be used as a template for the more simple cores, but if this is an unsatisfactory example, look at the default core.
 					e=applyDefaults(e,{
 						act:function(str) {//bot acts
 							console.log(str);
@@ -143,6 +152,7 @@
 						e.act(str);
 					};
 				},
+				
 				//"deep":function() {},
 				//"Q":function() {},
 			},
