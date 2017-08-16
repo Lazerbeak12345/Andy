@@ -72,8 +72,8 @@
 					e=applyDefaults(e,{
 						thinkInterval:100,//the amount of time between each thought in milliseconds, as it is passed directly to the second argument of setTimeout(). If thinkInterval===false, the bot can't think before it does anything.
 						thinkFilter:function(input) { return "thought:"+input;},//an oppertunity to change the thought to a proper input format, if needed.
-						reinforcementDecay:0.875;//see "this.reinforcement" as defined in this core
-						reinforcementDecayLimit:0.5;//see "this.reinforcement" as defined in this core
+						reinforcementDecay:0.875,//see "this.reinforcement" as defined in this core
+						reinforcementDecayLimit:0.5,//see "this.reinforcement" as defined in this core
 						actionMap:{
 							think:function(str) {
 								if (!this.thinkInterval) return;
