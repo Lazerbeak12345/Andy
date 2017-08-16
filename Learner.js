@@ -84,10 +84,10 @@
 						},
 					});
 					
-					var self_esteem=0;//The greater the number, the more self-esteem the bot is estimated to have
-					Object.defineProperty(this,'self_esteem',{get:function(){return self_esteem;}});// no changes to the varuble unless done internally via this core
-					var my_history=[];//a list of outputs that the bot has sent to a method in the action map
-					Object.defineProperty(this,'my_history',{get:function(){return my_history;}});
+					var selfEsteem=0;//The greater the number, the more self-esteem the bot is estimated to have
+					Object.defineProperty(this,'selfEsteem',{get:function(){return selfEsteem;}});// no changes to the varuble unless done internally via this core
+					var myHistory=[];//a list of outputs that the bot has sent to a method in the action map
+					Object.defineProperty(this,'myHistory',{get:function(){return myHistory;}});
 					var __words__={};//all of the sub-strings that have a value asociated with them
 					Object.defineProperty(this,'__words__',{get:function(){return __words__;}});
 					
@@ -101,18 +101,18 @@
 						
 						e1=applyDefaults(e1,{
 							val:0,//the value to apply to each string and substring - <0 is a punishment >0 is a reward zero does nothing
-							reinforcementDecay:e.reinforcementDecay;//before working on an older string, "val" is multiplied by this number
-							reinforcementDecayLimit:e.reinforcementDecayLimit;//the limit for how close "val" can be to zero before aborting "recursive" history reinforcement
+							reinforcementDecay:e.reinforcementDecay,//before working on an older string, "val" is multiplied by this number
+							reinforcementDecayLimit:e.reinforcementDecayLimit,//the limit for how close "val" can be to zero before aborting "recursive" history reinforcement
 						});
 						
 						var i,len,index,part;//prevents a varuble from being redefined at every iteration of a loop, these varubles will be defined via their first usage
 						
-						for (i=my_history.length; (i>=0&&e1.val<e1.reinforcementDecayLimit); i--) {//every item in the output history, as long as the reinforcementDecayLimit allows, then leave the loop if the criteria doesn't fit anymore
+						for (i=myHistory.length; (i>=0&&e1.val<e1.reinforcementDecayLimit); i--) {//every item in the output history, as long as the reinforcementDecayLimit allows, then leave the loop if the criteria doesn't fit anymore
 							
-							for (len=(my_history[i].length); len>1; len--){//the length of the sub-string
-								for (index=0; index<(my_history[i].length-len); index++) {//the position of the sub-string
+							for (len=(myHistory[i].length); len>1; len--){//the length of the sub-string
+								for (index=0; index<(myHistory[i].length-len); index++) {//the position of the sub-string
 								
-									part=my_history[i].substr(index,len);
+									part=myHistory[i].substr(index,len);
 									
 									/*if the sub-string has not been incountered before, make a spot for it to go*/
 									if(typeof __words__[len]==="undefined"){
