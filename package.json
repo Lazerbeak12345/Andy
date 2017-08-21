@@ -1,6 +1,6 @@
 {
 	"name":"Learner",
-	"version":"0.0.0-pre-alfa0.9",
+	"version":"0.0.0-pre-alfa0.10",
 	"license":"MIT",
 	"repository":{
 		"type":"git",
@@ -10,7 +10,7 @@
 		"grunt": "1.0.1",
 		"grunt-cli": "1.2.0",
 		"grunt-contrib-jshint": "1.0.0",
-		"grunt-bootlint":"0.10.1"
+		"grunt-bootlint":"0.10.2"
 	},
 	"scripts": {
 		"test": "grunt --verbose"
