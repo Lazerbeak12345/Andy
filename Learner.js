@@ -13,14 +13,14 @@
 		f.toString=ret(hideFunc);
 		f.toLocaleString=ret(hideFunc);
 	}
-	function applyDefaults(input,defaults) { //I don't know if I want to keep this function the way it is right now, I may want it to be closer in simmilarity to the corrisponding function in jQuery (it's probabbly not by the same name as what is used here)
+	function applyDefaults(input,defaults) {
 		if (typeof(defaults)==='undefined') {
 			return input;
 		}else if (typeof(input)==='undefined') {
 			return defaults;
-		}else if (typeof(input)!==typeof(defaults)) {
+		}/*else if ((typeof(input)).toString()!==(typeof(defaults)).toString()) {//typeof would not work in many situations
 			return defaults;
-		}
+		}*/
 		var output=JSON.parse(JSON.stringify(input)),i;
 		for(i in defaults) {
 			output[i]=applyDefaults(input[i],defaults[i]);
@@ -31,7 +31,7 @@
 		}
 		return output;
 	}
-	function defOneWayVar(str,v) {
+	function def(str,v) {
 		Object.defineProperty(this,str,{get:function(){return v;}});// no changes to the varuble unless done internally via this core
 	}
 
@@ -52,6 +52,7 @@
 			e=applyDefaults(e,this.defaults);// uses Learner.prototype.defaults for the defaults
 			this.cores[e.core].apply(this,e.coreSettings);
 			//passes e.coreSettings (Learner.prototype.defaults.coreSettings) into the core function that is specified in e.core (Learner.prototype.defaults.core)
+			this.core=e.core;//for debugging
 		};
 		hide(Learner);
 		
@@ -100,12 +101,13 @@
 					def.call(this,'__allHistory__',allHistory);
 					def.call(this,'__words__',words);
 					
-					this.action=function(e0) {
+					var action=function(e0) {
 						/*called on user action, or other enviromential changes*/
 					};
-					hide(this.action);
+					hide(action);
+					def.call(this,'action',action);
 					
-					this.reinforcement=function f(e1) {
+					var reinforcement=function f(e1) {
 						/*user rewards or punishes (positive or negitive reinforcemnt)*/
 						
 						e1=applyDefaults(e1,{
@@ -139,7 +141,8 @@
 							el.val*=e1.reinforcementDecay;
 						}
 					};
-					hide(this.reinforcement);
+					hide(reinforcement);
+					def.call(this,'reinforcement',reinforcement);
 				},
 				
 				"__brickWall__":function(e) {//this can be used as a template for the more simple cores, but if this is an unsatisfactory example, look at the default core.
