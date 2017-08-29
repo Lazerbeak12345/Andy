@@ -14,9 +14,9 @@
 		f.toLocaleString=ret(hideFunc);
 	}
 	function applyDefaults(input,defaults) {
-		if (typeof(defaults)==='undefined') {
+		if ((typeof(defaults)).toString()==='undefined'||(typeof(defaults)).toString()==='string') {
 			return input;
-		}else if (typeof(input)==='undefined') {
+		}else if ((typeof(input)).toString()==='undefined') {
 			return defaults;
 		}/*else if ((typeof(input)).toString()!==(typeof(defaults)).toString()) {//typeof would not work in many situations
 			return defaults;
@@ -40,7 +40,7 @@
 			module=Learner;//for Node.js
 		}else if(typeof define!=="undefined"){
 			define("Learner",function() {
-				return Learner;//for Require.js and similar tools
+				return Learner;//for Require.js and similar tools (like Dojo)
 			});
 		}
 		global.Learner=Learner;//For all web browsers (or the like)
