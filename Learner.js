@@ -1,4 +1,5 @@
 (function(global) {//main wrapper
+	/*Here we define all of the functions that may be used throught the porgect that we don't want to be internal*/
 	
 	var hideFunc="function() { /*Look at the scource code if you really want to see how this works! :p*/ }";
 	function ret(val) {
@@ -36,6 +37,7 @@
 	}
 
 	(function(Learner) {//globaliser
+		/*Here we export the Learner.js's modules through various exporting formats*/
 		if (typeof module!=="undefined") {
 			module=Learner;//for Node.js
 		}else if(typeof define!=="undefined"){
@@ -45,6 +47,7 @@
 		}
 		global.Learner=Learner;//For all web browsers (or the like)
 	})((function() {//definer
+		/*Here we define the first module: Learner at the end of this function we return Learner when it is ready, then it is handled by the above function.*/
 		var Learner=function(e) {
 			/*This function builds base constructor.
 			  e is the settings for this instance of Learner 
