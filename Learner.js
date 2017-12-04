@@ -81,17 +81,17 @@
 						thinkFilter:function(input) { return "thought:"+input;},//an oppertunity to change the thought to a proper input format, if needed.
 						reinforcementDecay:0.875,//see "this.reinforcement" as defined in this core
 						reinforcementDecayLimit:0.5,//see "this.reinforcement" as defined in this core
-						actionMap:{
+						actionMap:{//an array of all of the actions that the bot can take. Currently the bot can do naught but wonder
 							think:function(str) {
 								if (!this.thinkInterval) return;
-								setTimeout(function() {
+								setTimeout(function() {//this is so we don't get a stackoverflow error
 									this.action(this.thinkFilter(str));
 								},this.thinkInterval);
 							},
 						},
 					});
 					
-					var selfEsteem=0,//The greater the number, the more self-esteem the bot is estimated to have
+					var selfEsteem=0,//The greater the number, the more self-esteem the bot is estimated to have. Negitive is a bad thing. Clearly shows depression.
 					myHistory=[],//a list of outputs that the bot has sent to a method in the action map
 					envHistory=[],//a list of enviromential updates
 					allHistory=[],//a list of all enviromential updates and outputs that the bot has sent to a method in the action map
@@ -106,6 +106,11 @@
 					
 					var action=function(e0) {
 						/*called on user action, or other enviromential changes*/
+						e1=applyDefaults(e1,{
+							val:"",//The string that will now be manipulated.
+						});
+						//I am still working on this, and actually have forgotten some of what happens here. I do recall that it has two steps.
+						//Step 1:?  <- I told you I forgot things.
 					};
 					hide(action);
 					def.call(this,'action',action);
@@ -121,6 +126,8 @@
 						
 						var i,len,index,part;//prevents a varuble from being redefined at every iteration of a loop, these varubles will be defined via their first usage
 						
+						this.selfEsteem+=e1.val;//this is where the self-esteem-related magic happens. To be honest, this is really jsut a way to proove that the bot has or hasn't been abused, by anyone. Including itself.
+						
 						for (i=myHistory.length; (i>=0&&e1.val<e1.reinforcementDecayLimit); i--) {//every item in the output history, as long as the reinforcementDecayLimit allows, then leave the loop if the criteria doesn't fit anymore
 							
 							for (len=(myHistory[i].length); len>1; len--){//the length of the sub-string
@@ -129,19 +136,19 @@
 									part=myHistory[i].substr(index,len);//this is the actual sub-string
 									
 									/*if the sub-string has not been incountered before, make a spot for it to go*/
-									if(typeof words[len]==="undefined"){
+									if(typeof words[len]==="undefined"){//place for this length of sub-string
 										words[len]={};
 									}
-									if(typeof words[len][part]==="undefined"){
+									if(typeof words[len][part]==="undefined"){//the value itself
 										words[len][part]=el.val;
-										continue;//in this case it would be a waste of prossessing to set it to zero now then change it later, so just go on to the next sub-string
+										continue;//in this case it would be a waste of prossessing to set it to zero now then change it later, so set it now, then go on to the next sub-string
 									}
 									
 									words[len][part]+=el.val;//this is where the value is actually changed
 								}
 							}
 							
-							el.val*=e1.reinforcementDecay;
+							el.val*=e1.reinforcementDecay;//and thus it decays.
 						}
 					};
 					hide(reinforcement);
