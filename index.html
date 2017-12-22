@@ -69,7 +69,7 @@
 				}else{
 					out=decodeBase64(response);
 				}*/
-				$("#content").html(marked(response.content));//based on code from https://github.com/zmckinnon/jquery-gh-readme
+				$("#content").html(marked(response));//based on code from https://github.com/zmckinnon/jquery-gh-readme
 				$("blockquote").addClass("blockquote");
 			});
 			if (loc!="/README") {
