@@ -60,7 +60,7 @@
 				}
 				return r;
 			};//https://stackoverflow.com/questions/2820249/base64-encoding-and-decoding-in-client-side-javascript
-			var loc=(function() {return location.search.substring(1)||"README";})();
+			var loc=(function() {return location.search.substring(1)||"/README";})();
 			$.get('https://raw.githubusercontent.com/Lazerbeak12345/Learner/master'+loc+'.md', function (response) {
 				console.log(response);
 				/*var out;
@@ -69,7 +69,7 @@
 				}else{
 					out=decodeBase64(response);
 				}*/
-				$("#content").html(marked(response));//based on code from https://github.com/zmckinnon/jquery-gh-readme
+				$("#content").html(marked(response.content));//based on code from https://github.com/zmckinnon/jquery-gh-readme
 				$("blockquote").addClass("blockquote");
 			});
 			if (loc!="/README") {
